@@ -3,7 +3,7 @@
 
 //generate random word for game
 function genRandoWord(genWordsArr){
-    return genWordsArr[Math.floor(Math.random() * (genWordsArr.length))];
+    return genWordsArr[Math.floor(Math.random() * (genWordsArr.length - 1))];
 };
 
 // take that word and count the number of letters then generate that number of spaces
@@ -48,7 +48,7 @@ function replaceChar(userKey,indexes,wordSpace){
 //winArr is an array to check if the user has entered all the characters that belong in the random
 //word
 var wins = 0;
-var numGuesses = 0;
+var numGuesses = 20;
 var randomWord = "";
 var winArr = [];
 
@@ -61,17 +61,18 @@ document.onkeyup = function(event){
         numGuesses = 20;
         lettersGuessed = "";
         winArr=[];
-        alert("Please only Type Letters, Press SpaceBar for a new Word");
         document.getElementById("wordSpaces").innerHTML = makeSpaces(randomWord);
         document.getElementById("numWins").innerHTML = "Wins: " + wins;
         document.getElementById("numGuessRem").innerHTML = "Number of Guesses Remaining: " + numGuesses;
         document.getElementById("lettersGuessed").innerHTML = "Letters Guessed " + lettersGuessed;
+        document.getElementById("winpic").innerHTML = "";
+        alert("Please only Type Letters, Press SpaceBar for a new Word");
     }
 }
 
 //guess letters, take user input from key
 document.onkeydown = function(event){
-    var userKey = event.key;
+    var userKey = event.key.toLowerCase();
     //use letter match to get indexes array from the user key entered.
     var indexes = letterMatch(userKey,randomWord);
     if(indexes.length>0){
@@ -94,15 +95,16 @@ document.onkeydown = function(event){
             document.getElementById("numWins").innerHTML = "Wins: " + wins;
             numGuesses = 20;
             document.getElementById("wordSpaces").innerHTML = "You WIN! Press Spacebar for a new word";
-            lettersGuessed = "";
-            document.getElementById("lettersGuessed").innerHTML = "Letters Guessed " + lettersGuessed;
+            document.getElementById("lettersGuessed").innerHTML = "The word is: " + randomWord;
             winArr=[];
-        }else if(numGuesses<=0 && winArr.length !== randomWord.length){
+            //play audio for winning, show picture bonus!
+            document.getElementById("winpic").innerHTML = "<img src=\"assets/images/" + randomWord + ".jpg\" height = \"150px\" width = \"150px\">";
+        }else if(numGuesses<0){
             //lose
             document.getElementById("wordSpaces").innerHTML = "Sorry you lose Press Spacebar for a new word";
             numGuesses = 20;
             lettersGuessed = "";
-            document.getElementById("lettersGuessed").innerHTML = "Letters Guessed " + lettersGuessed;
+            document.getElementById("lettersGuessed").innerHTML = "The word was: " + randomWord;
             winArr=[];
         }
     }else{
@@ -111,12 +113,12 @@ document.onkeydown = function(event){
         document.getElementById("lettersGuessed").innerHTML = "Letters Guessed " + lettersGuessed;
         numGuesses -=1;
         document.getElementById("numGuessRem").innerHTML = "Number of Guesses Remaining: " + numGuesses;
-        if(numGuesses<=0 && winArr.length !== randomWord.length){
+        if(numGuesses<0){
             //lose
             document.getElementById("wordSpaces").innerHTML = "Sorry you lose press Spacebar for a new word";
             numGuesses = 20;
             lettersGuessed = "";
-            document.getElementById("lettersGuessed").innerHTML = "Letters Guessed " + lettersGuessed;
+            document.getElementById("lettersGuessed").innerHTML = "The word was: " + randomWord;
             winArr=[];
         }
     }    

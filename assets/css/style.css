@@ -13,3 +13,10 @@
 #wordSpaces{
     width: 100%;
 }
+.otherrow{
+    background:salmon;
+    height: 200px;
+}
+.text{
+    padding: 5%;
+}
